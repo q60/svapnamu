@@ -1,0 +1,8 @@
+zig-cache/
+zig-out/
+
+# package dependencies
+deps.zig
+
+# zigmod
+.zigmod/
