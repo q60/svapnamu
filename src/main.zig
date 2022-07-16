@@ -3,7 +3,6 @@ const stdout = std.io.getStdOut().writer();
 
 const zfetch = @import("zfetch");
 
-
 pub fn main() !void {
     var buffer: [0x5000]u8 = undefined;
     var fba = std.heap.FixedBufferAllocator.init(&buffer);
@@ -28,7 +27,7 @@ pub fn main() !void {
         if (read == 0) break;
 
         var quote = std.mem.split(u8, buf[0..read], "\n");
-        const quote_text = try wrap(allocator, quote.next().?, 40);
+        const quote_text = try wrap(allocator, quote.next().?, 45);
         defer allocator.free(quote_text);
         const quote_author = quote.next();
 
@@ -40,7 +39,6 @@ pub fn main() !void {
     }
 }
 
-
 fn wrap(allocator: std.mem.Allocator, string: []const u8, max_length: usize) ![]u8 {
     var words = std.mem.split(u8, string, " ");
     var head = words.next();
@@ -48,18 +46,20 @@ fn wrap(allocator: std.mem.Allocator, string: []const u8, max_length: usize) ![]
     var acc: usize = 0;
     var total_length: usize = 0;
 
-    var result = try allocator.alloc(u8, string.len + 1);
+    var result = try allocator.alloc(u8, string.len);
 
     while (head != null) {
         const word = head.?;
         const word_length = word.len;
 
-        if (acc >= max_length) {
-            acc = word_length;
-            result[total_length + word_length] = '\n';
-        } else {
-            acc += word_length;
-            result[total_length + word_length] = ' ';
+        if (total_length + word_length < string.len) {
+            if (acc >= max_length) {
+                acc = word_length;
+                result[total_length + word_length] = '\n';
+            } else {
+                acc += word_length + 1;
+                result[total_length + word_length] = ' ';
+            }
         }
 
         for (word) |char, i| {
@@ -70,5 +70,5 @@ fn wrap(allocator: std.mem.Allocator, string: []const u8, max_length: usize) ![]
         head = words.next();
     }
 
-    return result[0..string.len];
+    return result;
 }
