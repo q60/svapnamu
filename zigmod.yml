@@ -1,6 +1,0 @@
-id: cvhwc4ejbp08taukqf0k9wxxi81v8529gr4timcqy1ulu8ol
-name: svapnamu
-license: MIT
-description: Random quote fetching console utility.
-root_dependencies:
-  - src: git https://github.com/truemedian/zfetch
