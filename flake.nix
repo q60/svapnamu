@@ -27,7 +27,7 @@
 
           buildPhase = ''
             runHook preBuild
-            zig build -Doptimize=ReleaseFast
+            zig build -Doptimize=ReleaseSmall
             runHook postBuild
           '';
 
